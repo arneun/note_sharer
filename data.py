@@ -5,7 +5,7 @@ class Database:
     def setup():
         conn = sqlite3.connect('')
         c = conn.cursor()
-        c.execute()
+        c.execute(''' CREATE TABLE notes (hash text, title text, note text, edit_date text) ''')
         
         conn.commit()
         conn.close()
