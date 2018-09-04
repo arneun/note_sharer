@@ -46,6 +46,14 @@ class Database:
         c.execute(command)
         conn.commit()
         conn.close()
+    
+    @staticmethod
+    def execute(command, arguments)
+        conn = sqllite.connect('')
+        c = conn.cursor()
+        c.execute(command, arguments)
+        conn.commit()
+        conn.close()
 
     @staticmethod       
     def get_all_notes():
@@ -58,8 +66,11 @@ class Database:
     def add_note(note):
         execute('''INSERT INTO notes (title, hash, edit_date, note) VALUES (?,?,?,?)''', (note.title, note.start_hash, note.content) )
 
-
-
+    def add_notes(notes):
+        command = '''INSERT INTO notes (title, hash, edit_date, note) VALUES '''
+        for note in notes:
+            command.append('''?,?,?,?''') 
+        execute(command, notes)
 
 class Memory:
     __instance = None
