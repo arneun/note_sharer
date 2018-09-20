@@ -86,19 +86,19 @@ class Memory:
             raise Exception("Singleton! WTF happend?")
         else: 
             Singleton.__instance = self
+        self.addresses = []    
+
     
-    addresses = []
-    
-    def store_addresses(new_addresses):
-        addresses = addresses + new_addresses
+    def store_addresses(self, new_addresses):
+        self.addresses = self.addresses + new_addresses
         return True
     
-    def addAddress(new_address):
-        addresses.append(new_address)
+    def addAddress(self, new_address):
+        self.addresses.append(new_address)
         return True
     
-    def getAddresses():
-        return addresses
+    def getAddresses(self):
+        return self.addresses
 
 
 
