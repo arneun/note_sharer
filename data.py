@@ -13,7 +13,7 @@ class Database:
 
     @staticmethod
     def __get_one(command):
-        conn = sqllite3.connect('')
+        conn = sqlite3.connect('')
         c = conn.cursor()
         c.execute(command)
 
@@ -25,7 +25,7 @@ class Database:
 
     @staticmethod
     def __get_all(command):
-        conn = sqllite3.connect('')
+        conn = sqlite3.connect('')
         c = conn.cursor()
         c.execute(command)
         result = c.fetchall()
@@ -41,15 +41,15 @@ class Database:
     
     @staticmethod
     def execute(command):
-        conn = sqllite.connect('')
+        conn = sqlite3.connect('')
         c = conn.cursor()
         c.execute(command)
         conn.commit()
         conn.close()
     
     @staticmethod
-    def execute(command, arguments)
-        conn = sqllite.connect('')
+    def execute(command, arguments):
+        conn = sqlite3.connect('')
         c = conn.cursor()
         c.execute(command, arguments)
         conn.commit()
@@ -58,14 +58,15 @@ class Database:
     @staticmethod       
     def get_all_notes():
         notesList = []
-        for entry in __get_all('''SELECT title, hash, edit_date, note  FROM notes'''):
+        for entry in Database.__get_all('''SELECT title, hash, edit_date, note  FROM notes'''):
             notesList.append(Note(entry[0], entry[1], entry[2]), entry[3] ) 
         return notesList
 
     @staticmethod
     def add_note(note):
         execute('''INSERT INTO notes (title, hash, edit_date, note) VALUES (?,?,?,?)''', (note.title, note.start_hash, note.content) )
-
+    
+    @staticmethod
     def add_notes(notes):
         command = '''INSERT INTO notes (title, hash, edit_date, note) VALUES '''
         for note in notes:
@@ -78,14 +79,14 @@ class Memory:
     @staticmethod
     def get_instance():
         if Memory.__instance == None:
-            Singleton()
-        return Singleton.__instance
+            Memory()
+        return Memory.__instance
     
     def __init__(self):
-        if Singleton.__instance != None:
+        if Memory.__instance != None:
             raise Exception("Singleton! WTF happend?")
         else: 
-            Singleton.__instance = self
+            Memory.__instance = self
         self.addresses = []    
 
     
@@ -93,11 +94,11 @@ class Memory:
         self.addresses = self.addresses + new_addresses
         return True
     
-    def addAddress(self, new_address):
+    def add_address(self, new_address):
         self.addresses.append(new_address)
         return True
     
-    def getAddresses(self):
+    def get_addresses(self):
         return self.addresses
 
 

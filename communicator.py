@@ -1,15 +1,17 @@
 from data import *
 from note import Note
 
-class Communicator
+class Communicator:
     def search_for_apps():
-    
-    @staticmethod
-    def synchronize():
-        for note in notes:
-            
+        pass
 
-        return 
+    @staticmethod
+    def get_notes_hash():
+        hashes = []
+        for note in Communicator.get_notes():
+            hashes.append(note.start_hash)
+        
+        return hashes
 
     @staticmethod
     def get_notes():
@@ -17,7 +19,7 @@ class Communicator
 
     @staticmethod
     def welcome(addres):
-        mem = Memory.getInstance()
-        return mem.addAddress(addres)
+        mem = Memory.get_instance()
+        return mem.add_address(addres)
 
 
