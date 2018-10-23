@@ -23,11 +23,17 @@ def greet():
 def acquire():
     return json.dumps( Communicator.get_notes_hash())
         
-@app.route('/synchronizeRec', methods=['GET'])
-def synchronize(): 
+@app.route('/dates', methods=['GET'])
+def notes(hashes): 
     return json.dumps( (hash(Communicator.get_notes_dates()), Communicator.get_notes_dates() ) )
 
+@app.route('/notes', methods=['GET'])
+def notes(): 
+    return json.dumps( Communicator.get_notes() )
 
 
+@app.route('/notes', methods=['POST'])
+def notes():
+    Communicator.synchronize(json.dumps(request.get_json()))  
 
 
