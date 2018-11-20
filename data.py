@@ -1,5 +1,6 @@
 
 import sqlite3
+import datetime
 
 class Database:
     @staticmethod
@@ -37,7 +38,7 @@ class Database:
 
     @staticmethod
     def get_note(note_hash):
-        __get_one('''SELECT hash, title, note, edit_date FROM notes WHERE hash = ? ''', (note_hash, ) )
+        __get_one('''SELECT hash, title, note, edit_date FROM notes WHERE hash = ? ''', (note_hasha))
     
     @staticmethod
     def execute(command):
@@ -61,6 +62,19 @@ class Database:
         for entry in Database.__get_all('''SELECT title, hash, edit_date, note  FROM notes'''):
             notesList.append(Note(entry[0], entry[1], entry[2]), entry[3] ) 
         return notesList
+
+    @staticmethod
+    def update_notes_by_hashes(notes):
+        for note in notes:
+           execute('''UPDATE notes SET note = ?, edit_date = ?  WHERE hash = ?''', (note.content, datetime.datetime.now(), note.start_hash))
+
+
+    @staticmethod
+    def get_notes_hash():
+        notes_dict = {}
+        for entry in Database.__get_all('''SELECT hash, edit_date FROM notes'''):
+            notesList[entry[0]] = entry[1] 
+        return notes_dict
 
     @staticmethod
     def add_note(note):
