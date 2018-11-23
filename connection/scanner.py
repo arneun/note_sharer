@@ -12,11 +12,11 @@ class Scanner:
     
     
     def addresses_in_subnet(self, host_ip):
-        ipaddress.ip_network(host_ip)
+       return ipaddress.ip_network(host_ip)
 
 
 
-    def scanAll(self):
+    def scan_all(self):
         
         
 
