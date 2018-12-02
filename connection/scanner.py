@@ -3,6 +3,8 @@ import socket
 import asyncio
 import ipaddress
 import netifaces
+from data import Memory
+
 
 class Scanner:
     
@@ -17,10 +19,10 @@ class Scanner:
                 continue
             iface = netifaces.ifaddresses(i).get(netifaces.AF_INET)
             if iface != None:
-        for j in iface:
+                for j in iface:
                     myIP = (j['addr'], j['netmask'])
         
-        return (__get_net_addr(myIP[0],myIP[1]),myIP[1])
+        return myIP
     
     
     def addresses_in_subnet(self, host_ip, mask):
@@ -28,12 +30,13 @@ class Scanner:
 
 
 
-    def scan_all(self):
+    async def scan_all(self):
         (ip, mask) = get_ip()
-        adresses = addresses_in_subnet(ip, mask)
+        adresses = addresses_in_subnet(__get_net_addr(ip, mask), mask)
         adresses.remove(ip)
         
-    
+    async def check(self):
+        pass
 
 
 
