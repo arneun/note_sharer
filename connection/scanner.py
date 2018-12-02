@@ -5,6 +5,9 @@ import ipaddress
 import netifaces
 
 class Scanner:
+    
+    def __get_net_addr(ip, mask):
+        return ipaddress.ip_adress(int(ip) & int(netmask))
 
     def get_ip(self):
         myIP = ('','')
@@ -14,13 +17,13 @@ class Scanner:
                 continue
             iface = netifaces.ifaddresses(i).get(netifaces.AF_INET)
             if iface != None:
-                for j in iface:
+        for j in iface:
                     myIP = (j['addr'], j['netmask'])
-        return myIP
+        
+        return (__get_net_addr(myIP[0],myIP[1]),myIP[1])
     
     
     def addresses_in_subnet(self, host_ip, mask):
-        
         return ipaddress.ip_network(host_ip + '/' + mask)
 
 
@@ -30,7 +33,7 @@ class Scanner:
         adresses = addresses_in_subnet(ip, mask)
         adresses.remove(ip)
         
-
+    
 
 
 
