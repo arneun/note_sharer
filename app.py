@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import request
-from data import *
+from storage.data import *
 from communicator import *
 from note import Note
 import json
@@ -24,16 +24,16 @@ def acquire():
     return json.dumps( Communicator.get_notes_hash())
         
 @app.route('/dates', methods=['GET'])
-def notes(hashes): 
+def notes_time(hashes): 
     return json.dumps( (hash(Communicator.get_notes_dates()), Communicator.get_notes_dates() ) )
 
 @app.route('/notes', methods=['GET'])
-def notes(): 
+def get_notes(): 
     return json.dumps( Communicator.get_notes() )
 
 
 @app.route('/notes', methods=['POST'])
-def notes():
+def add_notes():
     Communicator.synchronize(json.dumps(request.get_json()))  
-
+    
 

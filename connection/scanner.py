@@ -3,7 +3,7 @@ import socket
 import asyncio
 import ipaddress
 import netifaces
-from data import Memory
+from storage.data import Memory
 
 
 class Scanner:
@@ -29,15 +29,18 @@ class Scanner:
         return ipaddress.ip_network(host_ip + '/' + mask)
 
 
-
-    async def scan_all(self):
+    def scan_all(self):
         (ip, mask) = get_ip()
         adresses = addresses_in_subnet(__get_net_addr(ip, mask), mask)
         adresses.remove(ip)
-        
-    async def check(self):
-        pass
+        checks = [check() ]
 
+    async def check(self, ip_addr):
+        r = requests.get('ip_addr' + ':5000/greet')        
+        if r.text == 'hey':
+            return ip_addr True
+        else: 
+            return False
 
 
 

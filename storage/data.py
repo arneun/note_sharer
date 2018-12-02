@@ -1,4 +1,3 @@
-
 import sqlite3
 import datetime
 
@@ -67,7 +66,13 @@ class Database:
     def update_notes_by_hashes(notes):
         for note in notes:
            execute('''UPDATE notes SET note = ?, edit_date = ?  WHERE hash = ?''', (note.content, datetime.datetime.now(), note.start_hash))
-
+    
+    @staticmethod
+    def get_notes_by_hash(hashes):
+        notes = []
+        for note_id in hashes:
+            notes.append(get_note(note_id))
+        return notes
 
     @staticmethod
     def get_notes_hash():
