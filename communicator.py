@@ -1,4 +1,5 @@
 from storage.data import *
+from connection.scanner import Scanner
 from note import Note
 
 import requests
@@ -7,8 +8,18 @@ import json
 
 
 class Communicator:
+    @staticmethod
     def search_for_apps():
-        pass
+        sc = Scanner()
+        res = sc.scan_all()
+        memory = Memory.get_instance()
+        
+        addresses = []
+        for response in res:
+            addresses.append(str(response[0]))
+        print(addresses)
+        memory.store_addresses(addresses)
+
 
     @staticmethod
     def get_notes_hash():
@@ -17,6 +28,11 @@ class Communicator:
            hashes.append(note.start_hash)
         
         return hashes
+
+    @staticmethod
+    def get_other_apps():
+        mem = Memory.get_instance()
+        return mem.get_addresses()
 
     @staticmethod
     def get_notes():

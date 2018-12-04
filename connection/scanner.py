@@ -44,8 +44,6 @@ class Scanner:
             if not response is None and response[1] == 'hey':
                 result.append(response)
         
-
-        
         return result
     
     async def fetch(self, ip_address, session):

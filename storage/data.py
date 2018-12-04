@@ -1,19 +1,25 @@
 import sqlite3
 import datetime
 
+
+
 class Database:
-    @staticmethod
-    def setup():
-        conn = sqlite3.connect('')
+
+    def __init__(self):
+        self.database_name = 'storage.db'    
+
+    def setup(self):
+        conn = sqlite3.connect(self.database_name)
         c = conn.cursor()
         c.execute('''CREATE TABLE notes (id_note integer, hash text, title text, note text, edit_date text) ''')
+        conn.commit()
+        c.execute('''CREATE TABLE addresses(ip_address text)''')
         conn.commit()
         
         conn.close()
 
-    @staticmethod
-    def __get_one(command):
-        conn = sqlite3.connect('')
+    def __get_one(self, command):
+        conn = sqlite3.connect(self.database_name)
         c = conn.cursor()
         c.execute(command)
 
@@ -23,9 +29,8 @@ class Database:
         conn.close()
         return result
 
-    @staticmethod
-    def __get_all(command):
-        conn = sqlite3.connect('')
+    def __get_all(self, command):
+        conn = sqlite3.connect(self.database_name)
         c = conn.cursor()
         c.execute(command)
         result = c.fetchall()
@@ -35,62 +40,75 @@ class Database:
         return result
 
 
-    @staticmethod
-    def get_note(note_hash):
-        __get_one('''SELECT hash, title, note, edit_date FROM notes WHERE hash = ? ''', (note_hasha))
+    def get_note(self, note_hash):
+        self.__get_one('''SELECT hash, title, note, edit_date FROM notes WHERE hash = ? ''', (note_hasha))
     
-    @staticmethod
-    def execute(command):
-        conn = sqlite3.connect('')
+    def execute(self, command):
+        conn = sqlite3.connect(self.database_name)
         c = conn.cursor()
         c.execute(command)
         conn.commit()
         conn.close()
     
-    @staticmethod
-    def execute(command, arguments):
-        conn = sqlite3.connect('')
+    def execute(self, command, arguments):
+        conn = sqlite3.connect(self.database_name)
         c = conn.cursor()
         c.execute(command, arguments)
         conn.commit()
         conn.close()
 
-    @staticmethod       
-    def get_all_notes():
+    def executemany(self, command, arg_list):
+        conn = sqlite3.connect(self.database_name)
+        c = conn.cursor()
+        c.executemany(command, arg_list)
+        conn.commit()
+        conn.close()
+
+    def get_all_notes(self):
         notesList = []
-        for entry in Database.__get_all('''SELECT title, hash, edit_date, note  FROM notes'''):
+        for entry in self.__get_all('''SELECT title, hash, edit_date, note  FROM notes'''):
             notesList.append(Note(entry[0], entry[1], entry[2]), entry[3] ) 
         return notesList
 
-    @staticmethod
-    def update_notes_by_hashes(notes):
+    def update_notes_by_hashes(self, notes):
         for note in notes:
-           execute('''UPDATE notes SET note = ?, edit_date = ?  WHERE hash = ?''', (note.content, datetime.datetime.now(), note.start_hash))
+           self.execute('''UPDATE notes SET note = ?, edit_date = ?  WHERE hash = ?''', (note.content, datetime.datetime.now(), note.start_hash))
     
-    @staticmethod
-    def get_notes_by_hash(hashes):
+    def get_notes_by_hash(self, hashes):
         notes = []
         for note_id in hashes:
-            notes.append(get_note(note_id))
+            notes.append(self.get_note(note_id))
         return notes
 
-    @staticmethod
-    def get_notes_hash():
+    def get_notes_hash(self):
         notes_dict = {}
-        for entry in Database.__get_all('''SELECT hash, edit_date FROM notes'''):
+        for entry in self.__get_all('''SELECT hash, edit_date FROM notes'''):
             notesList[entry[0]] = entry[1] 
         return notes_dict
 
-    @staticmethod
-    def add_note(note):
-        execute('''INSERT INTO notes (title, hash, edit_date, note) VALUES (?,?,?,?)''', (note.title, note.start_hash, note.content) )
+    def add_note(self, note):
+        self.execute('''INSERT INTO notes (title, hash, edit_date, note) VALUES (?,?,?,?)''', (note.title, note.start_hash, note.content) )
     
-    @staticmethod
-    def add_notes(notes):
-        command = '''INSERT INTO notes (title, hash, edit_date, note) VALUES '''
-        for note in notes:
-            command.append('''?,?,?,?''') 
-        execute(command, notes)
+    def add_notes(self, notes):
+        command = '''INSERT INTO notes (title, hash, edit_date, note) VALUES (?,?,?,?)'''
+        notes_to_add = [(note.title, note.start_hash, note.edit_date, note.content)  for note in notes]
+        
+        self.execute(command, notes)
+    
+    def add_address(self, ip_addr):
+        self.execute('''INSERT INTO addresses (ip_address) VALUES (?)''', (ip_addr))
+
+    def add_addresses(self, ip_addresses):
+        command = '''INSERT INTO addresses (ip_address) VALUES (?)'''
+        addresses = [(i, ) for i in ip_addresses]
+        
+        self.executemany(command, addresses)
+
+    def get_addresses(self):
+        addresses = []
+        for entry in self.__get_all('''SELECT ip_address FROM addresses'''):
+            addresses.append(entry[0])
+        return addresses
 
 class Memory:
     __instance = None
