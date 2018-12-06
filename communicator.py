@@ -1,6 +1,7 @@
 from storage.data import *
 from connection.scanner import Scanner
 from note import Note
+import hashlib
 
 import requests
 import json
@@ -36,7 +37,8 @@ class Communicator:
 
     @staticmethod
     def get_notes():
-        return Database.get_all_notes()
+        db = Database()
+        return db.get_all_notes()
 
     @staticmethod
     def welcome(addres):
@@ -50,14 +52,26 @@ class Communicator:
 
     @staticmethod
     def compare_notes(notes):
-        stored_notes = Database.get_notes_hash()
+        db = Database()
+        stored_notes = db.get_notes_hash()
         newer_notes = []
         for note in notes:
             if note.start_hash in stored_notes:
                 if note.edit_date < stored_notes[note.start_hash]:
-                    Database.update_note(note)
+                    db.update_note(note)
                 else: newer_notes.append(note.start_hash)
         return newer_notes
+
+    @staticmethod
+    def add_note(note):
+        db = Database()
+        db.add_note(note)
+    
+    @staticmethod
+    def add_note(note_name, note_content):
+        nt = Note(note_name, hashlib.sha256(), datetime.now(), note_content)
+        db = Datebase()
+        db.add_note()
 
     @staticmethod
     def send_notes(note_list, address):

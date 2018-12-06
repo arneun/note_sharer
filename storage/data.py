@@ -1,6 +1,6 @@
 import sqlite3
-import datetime
-
+from datetime import datetime
+from note import Note
 
 
 class Database:
@@ -67,7 +67,7 @@ class Database:
     def get_all_notes(self):
         notesList = []
         for entry in self.__get_all('''SELECT title, hash, edit_date, note  FROM notes'''):
-            notesList.append(Note(entry[0], entry[1], entry[2]), entry[3] ) 
+            notesList.append(Note(entry[0], entry[1], entry[2], entry[3] )) 
         return notesList
 
     def update_notes_by_hashes(self, notes):
@@ -87,7 +87,7 @@ class Database:
         return notes_dict
 
     def add_note(self, note):
-        self.execute('''INSERT INTO notes (title, hash, edit_date, note) VALUES (?,?,?,?)''', (note.title, note.start_hash, note.content) )
+        self.execute('''INSERT INTO notes (title, hash, edit_date, note) VALUES (?,?,?,?)''', (note.title, note.start_hash, datetime.now(), note.content) )
     
     def add_notes(self, notes):
         command = '''INSERT INTO notes (title, hash, edit_date, note) VALUES (?,?,?,?)'''
