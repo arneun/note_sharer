@@ -1,0 +1,23 @@
+
+
+<!doctype html>
+<html>
+	<body>
+	
+		<h1>You didn't expected this much</h1>
+		<ul class=notes >
+			{% for note in notes %}
+			<li><h2>{{ note.title }} </h2>{{note.content|safe}}
+				{% endfor %}
+		</ul>
+
+		<form method="POST">
+			<input content='note_name'>
+			<input content='note_content'>
+			<input type='submit'>
+		</form>
+	</body>
+</html>
+
+
+
