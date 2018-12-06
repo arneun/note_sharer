@@ -10,12 +10,21 @@
 			<li><h2>{{ note.title }} </h2>{{note.content|safe}}
 				{% endfor %}
 		</ul>
-
-		<form method="POST">
-			<input content='note_name'>
-			<input content='note_content'>
-			<input type='submit'>
+		
+		
+		<form action'' method='post'>
+			{{ form.hidden_tag()}}
+			<p>
+				{{ form.note_title.label }}<br>
+				{{ form.note_title(size=32) }}
+			</p>
+			<p>
+				{{ form.note_content.label }}<br>
+				{{ form.note_content(size=64) }}
+			</p>
+			<p> {{ form.submit() }}</p>
 		</form>
+
 	</body>
 </html>
 

@@ -1,29 +1,32 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect
 from flask import request
 from storage.data import *
 from communicator import *
 from note import Note
+from forms.add_note import NoteForm
+from config import Config
 import json
 
 
 app = Flask(__name__)
-
-
-
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
+app.config.from_object(Config)
 
 
 
 
-@app.route('/notes', methods=['GET'])
+
+
+@app.route('/notes', methods=['GET', 'POST'])
 def get_main_page():
-    return render_template('notes.html', notes=Communicator.get_notes()) 
-@app.route('/notes', methods=['POST'])
-def send_note():
-    print(request.form['note_name'],request.form['note_content'])
-    Communicator.add_note(request.form['note_name'],request.form['note_content'])
+    form = NoteForm()
+    check =  form.validate_on_submit()
+    print(check)
+    if check:
+        Communicator.add_note(form.note_title.data,form.note_content.data)
+        return redirect('/notes')
+    
+    return render_template('notes.html', form=form , notes=Communicator.get_notes()) 
+
 
 @app.route('/api/greet')
 def greet():

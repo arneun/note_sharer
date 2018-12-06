@@ -11,7 +11,7 @@ class Database:
     def setup(self):
         conn = sqlite3.connect(self.database_name)
         c = conn.cursor()
-        c.execute('''CREATE TABLE notes (id_note integer, hash text, title text, note text, edit_date text) ''')
+        c.execute('''CREATE TABLE notes (id_note integer, hash text, title text, note text, edit_date timestamp) ''')
         conn.commit()
         c.execute('''CREATE TABLE addresses(ip_address text)''')
         conn.commit()
@@ -72,7 +72,7 @@ class Database:
 
     def update_notes_by_hashes(self, notes):
         for note in notes:
-           self.execute('''UPDATE notes SET note = ?, edit_date = ?  WHERE hash = ?''', (note.content, datetime.datetime.now(), note.start_hash))
+            self.execute('''UPDATE notes SET note = ?, edit_date = ?  WHERE hash = ?''', (note.content, datetime.datetime.now().isoformat()[:19],note.start_hash))
     
     def get_notes_by_hash(self, hashes):
         notes = []
@@ -87,7 +87,7 @@ class Database:
         return notes_dict
 
     def add_note(self, note):
-        self.execute('''INSERT INTO notes (title, hash, edit_date, note) VALUES (?,?,?,?)''', (note.title, note.start_hash, datetime.now(), note.content) )
+        self.execute('''INSERT INTO notes (title, hash, edit_date, note) VALUES (?,?,?,?)''', (note.title, str( note.start_hash), datetime.now().isoformat()[:19], note.content) )
     
     def add_notes(self, notes):
         command = '''INSERT INTO notes (title, hash, edit_date, note) VALUES (?,?,?,?)'''

@@ -70,8 +70,8 @@ class Communicator:
     @staticmethod
     def add_note(note_name, note_content):
         nt = Note(note_name, hashlib.sha256(), datetime.now(), note_content)
-        db = Datebase()
-        db.add_note()
+        db = Database()
+        db.add_note(nt)
 
     @staticmethod
     def send_notes(note_list, address):
