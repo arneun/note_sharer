@@ -19,13 +19,12 @@ app.config.from_object(Config)
 @app.route('/notes', methods=['GET', 'POST'])
 def get_main_page():
     form = NoteForm()
-    check =  form.validate_on_submit()
-    print(check)
-    if check:
+    
+    if form.validate_on_submit():
         Communicator.add_note(form.note_title.data,form.note_content.data)
         return redirect('/notes')
     
-    return render_template('notes.html', form=form , notes=Communicator.get_notes()) 
+    return render_template('notes.html', form=form, notes=Communicator.get_notes()) 
 
 
 @app.route('/api/greet')
