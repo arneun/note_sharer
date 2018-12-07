@@ -1,4 +1,5 @@
 from storage.data import *
+from storage.note_migration import NoteData
 from connection.scanner import Scanner
 from note import Note
 import hashlib
@@ -31,20 +32,10 @@ class Communicator:
         return hashes
 
     @staticmethod
-    def get_other_apps():
-        mem = Memory.get_instance()
-        return mem.get_addresses()
-
-    @staticmethod
     def get_notes():
-        db = Database()
+        db = NoteData()
         return db.get_all_notes()
 
-    @staticmethod
-    def welcome(addres):
-        mem = Memory.get_instance()
-        return mem.add_address(addres)
-    
     @staticmethod
     def synchronize(acquired_notes, sender_ip): 
         newer_hasheds = compare_notes(acquired_notes)
@@ -52,7 +43,7 @@ class Communicator:
 
     @staticmethod
     def compare_notes(notes):
-        db = Database()
+        db = NoteData()
         stored_notes = db.get_notes_hash()
         newer_notes = []
         for note in notes:
@@ -64,13 +55,13 @@ class Communicator:
 
     @staticmethod
     def add_note(note):
-        db = Database()
+        db = NoteData()
         db.add_note(note)
     
     @staticmethod
     def add_note(note_name, note_content):
         nt = Note(note_name, hashlib.sha256(), datetime.now(), note_content)
-        db = Database()
+        db = NoteData()
         db.add_note(nt)
 
     @staticmethod
@@ -88,3 +79,6 @@ class Communicator:
             dates.append(dates.edit_date)
 
         return (hashes, dates)
+
+   
+
