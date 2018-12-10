@@ -13,7 +13,7 @@ class Database:
         c = conn.cursor()
         c.execute('''CREATE TABLE notes (id_note INTEGER PRIMARY KEY NOT NULL, hash TEXT, title TEXT, note TEXT, edit_date TIMESTAMP) ''')
         conn.commit()
-        c.execute('''CREATE TABLE addresses(ip_address TEXT)''')
+        c.execute('''CREATE TABLE addresses(ip_address TEXT, auth_token TEXT, access_token TEXT)''')
         conn.commit()
         
         conn.close()
@@ -29,7 +29,7 @@ class Database:
         conn.close()
         return result
 
-
+  
 
     def get_one(self, command):
         conn = sqlite3.connect(self.database_name)
@@ -60,7 +60,7 @@ class Database:
         conn.commit()
         conn.close()
     
-    def execute(self, command, arguments):
+    def execute_args(self, command, arguments):
         conn = sqlite3.connect(self.database_name)
         c = conn.cursor()
         c.execute(command, arguments)

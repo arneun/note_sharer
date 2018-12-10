@@ -14,10 +14,10 @@ class NoteData:
 
     def update_notes_by_hashes(self, notes):
         for note in notes:
-            self.db.execute('''UPDATE notes SET note = ?, edit_date = ?  WHERE hash = ?''', (note.content, datetime.datetime.now().isoformat()[:19],note.start_hash))
+            self.db.execute_args('''UPDATE notes SET note = ?, edit_date = ?  WHERE hash = ?''', (note.content, datetime.datetime.now().isoformat()[:19],note.start_hash))
    
     def update_note_by_id(self, note):
-        self.db.execute('''UPDATE notes SET title = ?, edit_date = ?, note = ? WHERE id_note = ? ''',(note.title, note.edit_date,note.content, note.number)  )
+        self.db.execute_args('''UPDATE notes SET title = ?, edit_date = ?, note = ? WHERE id_note = ? ''',(note.title, note.edit_date,note.content, note.number)  )
 
     def get_notes_by_hash(self, hashes):
         notes = []
@@ -37,13 +37,13 @@ class NoteData:
 
 
     def add_note(self, note):
-        self.db.execute('''INSERT INTO notes (title, hash, edit_date, note) VALUES (?,?,?,?)''', (note.title, str( note.start_hash), datetime.now().isoformat()[:19], note.content) )
+        self.db.execute_args('''INSERT INTO notes (title, hash, edit_date, note) VALUES (?,?,?,?)''', (note.title, str( note.start_hash), datetime.now().isoformat()[:19], note.content) )
     
     def add_notes(self, notes):
         command = '''INSERT INTO notes (title, hash, edit_date, note) VALUES (?,?,?,?)'''
         notes_to_add = [(note.title, note.start_hash, note.edit_date, note.content)  for note in notes]
         
-        self.db.execute(command, notes)
+        self.db.execute_many(command, notes)
     
     def get_note_hash(self, note_hash):
         self.db.get_one('''SELECT id_note, hash, title, note, edit_date FROM notes WHERE hash = ? ''', (note_hasha))
