@@ -11,12 +11,25 @@ class Database:
     def setup(self):
         conn = sqlite3.connect(self.database_name)
         c = conn.cursor()
-        c.execute('''CREATE TABLE notes (id_note INTEGER PRIMATY KEY, hash TEXT, title TEXT, note TEXT, edit_date TIMESTAMP) ''')
+        c.execute('''CREATE TABLE notes (id_note INTEGER PRIMARY KEY NOT NULL, hash TEXT, title TEXT, note TEXT, edit_date TIMESTAMP) ''')
         conn.commit()
         c.execute('''CREATE TABLE addresses(ip_address TEXT)''')
         conn.commit()
         
         conn.close()
+
+    def get_one_where(self, command, arguments):
+        conn = sqlite3.connect(self.database_name)
+        c = conn.cursor()
+        c.execute(command, arguments)
+
+        result = c.fetchone()
+        
+        conn.commit()
+        conn.close()
+        return result
+
+
 
     def get_one(self, command):
         conn = sqlite3.connect(self.database_name)
@@ -40,9 +53,6 @@ class Database:
         return result
 
 
-    def get_note(self, note_hash):
-        self.__get_one('''SELECT id_note, hash, title, note, edit_date FROM notes WHERE hash = ? ''', (note_hasha))
-    
     def execute(self, command):
         conn = sqlite3.connect(self.database_name)
         c = conn.cursor()

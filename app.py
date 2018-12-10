@@ -20,21 +20,28 @@ notes_control = Notes()
 @app.route('/notes', methods=['GET', 'POST'])
 def get_main_page():
     form = NoteForm()
-    
+    notes = notes_control.get_notes()
+
     if form.validate_on_submit():
         notes_control.add_note(form.note_title.data,form.note_content.data)
         return redirect('/notes')
     
-    return render_template('notes.html', form=form, notes=Communicator.get_notes()) 
+    return render_template('notes.html', form=form, notes=notes) 
 
-#@app.route('/update_note/<note_id>'    )
-#def update_note(note_id):
-#    form = NoteForm()
-#
-#    if form.validate_on_submit():
-#        notes_contol.update_note(form.note_id, form.note_hash, form.note_title.data, form.note_content.data)
-#
-#    return render_template('notes.html',  , notes=notes_control.get_notes())
+@app.route('/update_note/<note_id>', methods=['GET', 'POST']    )
+def update_note(note_id):
+    form = NoteForm()
+    note = notes_control.get_note_by_id(note_id) 
+
+    if form.validate_on_submit():
+        notes_control.update_note(note_id, note.start_hash, form.note_title.data, form.note_content.data)
+        return redirect('/notes')
+    else:
+        form.note_title.data = note.title
+        form.note_content.data = note.content
+
+
+    return render_template('notes.html',form=form)
 
 @app.route('/api/greet')
 def greet():

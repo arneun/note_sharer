@@ -3,7 +3,7 @@ from storage.note_migration import NoteData
 from connection.scanner import Scanner
 from note import Note
 import hashlib
-
+from datetime import datetime
 import requests
 import json
 
@@ -49,8 +49,11 @@ class Notes:
         load = {'json_payload': note_list}
         r = request.post(address + "/notes", data=json.dumps(load))
 
-    def update_note(self, note_id):
-        pass
+    def update_note(self, note_id, note_hash, note_title, note_content):
+        note = Note(note_title,note_hash, datetime.now().isoformat()[:19], note_content, note_id)
+        self.db.update_note_by_id(note)
+        
+
 
     def get_notes_dates(self):
         hashes = []
@@ -62,5 +65,7 @@ class Notes:
         return (hashes, dates)
 
    
+    def get_note_by_id(self, note_id):
+        return self.db.get_note_id(note_id)
 
 
