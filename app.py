@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, redirect
 from flask import request
 
-from controllers.adresses import Addresses 
+from controllers.addresses import Addresses 
 from controllers.notes import Notes
 from storage.data import *
 from communicator import *
