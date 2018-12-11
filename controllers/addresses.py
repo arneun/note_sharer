@@ -1,9 +1,7 @@
 from connection.scanner import Scanner
 from storage.addresses_migration import AddressData
-
-
-import hashlib 
-
+from werkzeug.security import generate_password_hash, check_password_hash 
+from config import Config
 
 class Addresses:
     def __init__(self):
@@ -20,14 +18,16 @@ class Addresses:
 
 
     def welcome(self, address):      
-        ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(16)       
+        random_number = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(16))
+        auth_hash = generate_password_hash(random_number + Config.USER_NAME)
         
-        return self.db.add_address(address)
+        return self.db.add_address(address, auth_hash)
     
     def get_addresses(self):
         return self.db.get_addresses()
-
+    
+    
 
     def flush_addresses(self):
-        pass
+        self.db.flush_connections()
 

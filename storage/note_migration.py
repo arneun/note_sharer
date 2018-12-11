@@ -32,7 +32,8 @@ class NoteData:
         return notes_dict
 
     def get_note_id(self, id_note):
-        row = self.db.get_one_where('''SELECT title, hash, edit_date, note, id_note FROM notes WHERE id_note = (?) ''', (id_note))
+        row = self.db.get_one_where('''SELECT title, hash, edit_date, note, id_note FROM notes WHERE id_note = (?) ''', (id_note, ))
+
         return Note(row[0],row[1],row[2], row[3], row[4])
 
 

@@ -4,7 +4,6 @@ from flask import request
 from controllers.addresses import Addresses 
 from controllers.notes import Notes
 from storage.data import *
-from communicator import *
 from note import Note
 from forms.add_note import NoteForm
 from config import Config
