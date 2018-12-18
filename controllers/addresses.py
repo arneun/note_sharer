@@ -2,6 +2,8 @@ from connection.scanner import Scanner
 from storage.addresses_migration import AddressData
 from werkzeug.security import generate_password_hash, check_password_hash 
 from config import Config
+from entities.address import Address as Addr
+
 
 class Addresses:
     def __init__(self):
@@ -13,7 +15,8 @@ class Addresses:
         
         addresses = []
         for response in res:
-            addresses.append(str(response[0]))
+            addresses.append(Addr(str(response[0], access_token=str(response[1])))
+            
         self.db.add_addresses(addresses)
 
 

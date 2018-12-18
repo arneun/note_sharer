@@ -6,12 +6,14 @@ class AddressData:
     def __init__(self):
         self.db = Database()
 
-    def add_address(self, ip_addr, auth_token):
-        self.db.execute_args('''INSERT INTO addresses (ip_address, auth_token) VALUES (?,?)''', (ip_addr, auth_token))
+    def add_address(self, addr_entity):
+        self.db.execute_args('''INSERT INTO addresses (ip_address, auth_token, access_token) VALUES (?,?,?)''', (addr_entity.ip_address, addr_entity.auth_token, addr_entity.access_token))
 
-    def add_addresses(self, ip_addresses, auth_token, access_token):
-        command = '''INSERT INTO addresses (ip_address) VALUES (?)'''
-        addresses = [(i, ) for i in ip_addresses]
+
+
+    def add_addresses(self, addresses):
+        command = '''INSERT INTO addresses (ip_address, auth_token, access_token) VALUES (?,?,?)'''
+        addresses = [(i.ip_address, i.auth_token, i.access_token) for i in addresses]
        
         self.db.executemany(command, addresses)
 
