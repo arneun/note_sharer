@@ -22,11 +22,16 @@ class Addresses:
         auth_hash = generate_password_hash(random_number + Config.USER_NAME)
         
         return self.db.add_address(address, auth_hash)
+
+    def authenticate(self, address, auth_num):
+        return check_password_hash(self.db.get_address_auth(address), auth_num)
     
     def get_addresses(self):
         return self.db.get_addresses()
     
-    
+    def set_access(self, address, access_token):
+        self.db.upd_access_token(address, access_token)
+ 
 
     def flush_addresses(self):
         self.db.flush_connections()

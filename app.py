@@ -42,6 +42,11 @@ def update_note(note_id):
 
     return render_template('notes.html',form=form)
 
+
+@app.route('/api/confirm', methods=['POST'])
+def confirm():
+    pass
+
 @app.route('/api/greet', methods=['GET'])
 def greet():
     return 'hey' if addr_control.welcome(request.remote_addr) else 'sorry'    

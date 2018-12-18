@@ -1,5 +1,5 @@
 from storage.data import Database
-
+from entities.address import Address
 
 
 class AddressData:
@@ -21,12 +21,23 @@ class AddressData:
             addresses.append(entry[0])
         return addresses
 
+    def get_address_auth(self, address):
+        return self.db.get_one_where('''SELECT ip_address, auth_token WHERE ip_address = ? ''', (address, )  )
+
     
-
-
     def upd_auth_token(self, ip_address, token):
+        self.db.execute_args('''UPDATE addresses SET auth_token = ? WHERE ip_address = ?''', (ip_address, token))
+
+    def upd_access_token(self, ip_address, token):
         self.db.execute_args('''UPDATE addresses SET access_token = ? WHERE ip_address = ?''', (ip_address, token))
 
     def flush_connections(self):
         self.db.execute('''DELETE FROM addresses''')
+
+    def update_address(self, addr_entity):
+        if addr_entity.auth_token is not None:
+            self.upd_auth_token(self, addr_entity.auth_token)
+        if addr_entity.access_token is not None:
+            self.upd_access_token(self, add_entity.access_token)
+
 
