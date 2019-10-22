@@ -15,15 +15,14 @@ class Addresses:
         
         addresses = []
         for response in res:
-            addresses.append(Addr(str(response[0], access_token=str(response[1])))
+            addresses.append(Addr(str(response[0], access_token=str(response[1]))))
             
-        self.db.add_addresses(addresses)
-
+        return self.db.add_addresses(addresses)
 
     def welcome(self, address):      
         random_number = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(16))
         auth_hash = generate_password_hash(random_number + Config.USER_NAME)
-        
+
         return self.db.add_address(address, auth_hash)
 
     def authenticate(self, address, auth_num):
@@ -35,7 +34,6 @@ class Addresses:
     def set_access(self, address, access_token):
         self.db.upd_access_token(address, access_token)
  
-
     def flush_addresses(self):
         self.db.flush_connections()
 

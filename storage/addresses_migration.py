@@ -9,8 +9,6 @@ class AddressData:
     def add_address(self, addr_entity):
         self.db.execute_args('''INSERT INTO addresses (ip_address, auth_token, access_token) VALUES (?,?,?)''', (addr_entity.ip_address, addr_entity.auth_token, addr_entity.access_token))
 
-
-
     def add_addresses(self, addresses):
         command = '''INSERT INTO addresses (ip_address, auth_token, access_token) VALUES (?,?,?)'''
         addresses = [(i.ip_address, i.auth_token, i.access_token) for i in addresses]
@@ -26,7 +24,6 @@ class AddressData:
     def get_address_auth(self, address):
         return self.db.get_one_where('''SELECT ip_address, auth_token WHERE ip_address = ? ''', (address, )  )
 
-    
     def upd_auth_token(self, ip_address, token):
         self.db.execute_args('''UPDATE addresses SET auth_token = ? WHERE ip_address = ?''', (ip_address, token))
 

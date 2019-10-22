@@ -33,7 +33,7 @@ class Notes:
         newer_notes = []
         for note in notes:
             if note.start_hash in stored_notes:
-                if note.edit_date < stored_notes[note.start_hash]:
+                if note.edit_date < stored_notes[note.start_hash].edit_date:
                     self.db.update_note(note)
                 else: newer_notes.append(note.start_hash)
         return newer_notes
@@ -53,8 +53,6 @@ class Notes:
         note = Note(note_title,note_hash, datetime.now().isoformat()[:19], note_content, note_id)
         self.db.update_note_by_id(note)
         
-
-
     def get_notes_dates(self):
         hashes = []
         dates = []
@@ -63,7 +61,6 @@ class Notes:
             dates.append(dates.edit_date)
 
         return (hashes, dates)
-
    
     def get_note_by_id(self, note_id):
         return self.db.get_note_id(note_id)
